@@ -15,33 +15,98 @@
 body, html {
     height: 100%;
     margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f5f5f5;
 }
-h1{
+
+h1 {
     color: #fff;
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin: 0;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
+
+/* Full-page overlay for landing page */
+.landing-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(15px);
+    z-index: 999;
+    transition: all 0.5s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.landing-overlay.hidden {
+    opacity: 0;
+    visibility: hidden;
+    backdrop-filter: blur(0px);
+}
+
 #header {
     position: absolute;
-    top: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 30px 50px;
+    border-radius: 16px;
+    backdrop-filter: blur(20px);
+    text-align: center;
+    transition: all 0.5s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+#header.landing-mode {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1001;
+}
+
+#header.explore-mode {
+    position: absolute;
+    top: 20px;
     left: 20px;
-    width: 100%;
-    z-index: 10;
+    transform: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    background: rgba(0,0,0,0.1);
+    backdrop-filter: blur(10px);
+    border: none;
+    box-shadow: none;
 }
 
 #map {
     height: 100%;
+    border-radius: 0;
 }
 
-        .tooltip {
-            position: absolute;
-            z-index: 10;
-            width: 210px;
-            height: auto;
-            background-color: #fff;
-            border: 1px solid #ccc;
-            padding: 4px;
-            opacity: 0.8;
-            display: none;
-        }
+.tooltip {
+    position: absolute;
+    z-index: 1000;
+    width: 250px;
+    height: auto;
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    font-size: 14px;
+    line-height: 1.4;
+    backdrop-filter: blur(10px);
+    display: none;
+    pointer-events: none;
+}
 #infoBox {
     position: absolute;
     top: 100px; /* Adjust as needed */
@@ -76,28 +141,57 @@ h1{
 }
 .info-button {
     position: absolute;
-    top: 50%; /* Center vertically */
-    right: 20px; /* Place it 20px from the right edge */
-    transform: translateY(-50%); /* Adjust vertical positioning */
-    z-index: 10;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: #0078ff;
+}
+
+.info-button.hidden {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-50%) scale(0.8);
+}
+
+.info-button:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
 }
 
 .info-panel {
     position: absolute;
     top: 30%;
-    right: 60px;
+    right: 80px;
     width: 320px;
-    background-color: white;
-    border: 1px solid #ccc;
-    padding: 10px;
-    z-index: 10;
-    display: none; /* Initial state is hidden */
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    border-radius: 12px;
+    padding: 20px;
+    z-index: 1000;
+    display: none;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    backdrop-filter: blur(10px);
 }
 
 /* Class to show the panel */
 .show-info-panel {
     display: block;
 }
+
 .mapboxgl-ctrl-top-right {
     display: flex;
     align-items: center;
@@ -105,35 +199,141 @@ h1{
     z-index: 100;
 }
 
+/* Enhanced form controls */
+.control-panel select,
+.control-panel input[type="range"] {
+    width: 100%;
+    padding: 8px 12px;
+    border: 2px solid #e1e5e9;
+    border-radius: 6px;
+    background: white;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+.control-panel select:focus,
+.control-panel input[type="range"]:focus {
+    outline: none;
+    border-color: #0078ff;
+}
+
+.control-panel input[type="range"] {
+    padding: 0;
+    height: 6px;
+    background: #e1e5e9;
+    border: none;
+    border-radius: 3px;
+}
+
+.control-panel input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #0078ff;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.control-panel input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #0078ff;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* Switch container styling */
+.switch-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.switch-container label {
+    margin-bottom: 0;
+    margin-right: 10px;
+}
+
 .control-panel {
-    position: absolute;
+    
+position: absolute;
     top: 50%;
     left: 20px;
     transform: translateY(-50%);
-    background-color: white;
-    border: 1px solid #ccc;
-    padding: 10px;
-    z-index: 100;
-  
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    border-radius: 12px;
+    padding: 20px;
+    z-index: 1000;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    backdrop-filter: blur(10px);
+    width: 400px;
+    max-height: 80vh;
+    overflow-y: auto;
 }
+
+.control-panel h3 {
+    margin: 0 0 20px 0;
+    color: #333;
+    font-size: 1.2rem;
+    font-weight: 600;
+    border-bottom: 2px solid #0078ff;
+    padding-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.collapse-btn {
+    background: none;
+    border: none;
+    color: #0078ff;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    display: none; /* Hidden by default, shown on responsive */
+}
+
+.collapse-btn:hover {
+    background: rgba(0, 120, 255, 0.1);
+}
+
+.control-panel.collapsed {
+    max-height: 60px;
+    overflow: hidden;
+}
+
+.control-panel.collapsed .control-panel-content {
+    display: none;
+}
+
 .control-panel > * {
-    display: block; /* Ensures that all child elements are displayed as block, enforcing a new line for each */
-    margin-bottom: 10px; /* Adds some space between each element */
+    display: block;
+    margin-bottom: 15px;
 }
 
 .control-panel label {
-    margin-bottom: 5px; /* Adds a small space below each label for clarity */
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #555;
+    font-size: 14px;
 }
 
 #geocoder {
     margin-bottom: 20px; /* Ensures space below the geocoder for clarity and separation */
 }
-/* The switch - the box around the slider */
+/* Enhanced switch styling */
 .switch {
   position: relative;
   display: inline-block;
-  width: 40px;
-  height: 20px;
+  width: 50px;
+  height: 24px;
 }
 
 /* Hide default HTML checkbox */
@@ -151,72 +351,329 @@ h1{
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
+  background-color: #e1e5e9;
+  -webkit-transition: .3s;
+  transition: .3s;
+  border-radius: 24px;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .slider:before {
   position: absolute;
   content: "";
-  height: 16px;
-  width: 16px;
-  left: 4px;
-  bottom: 2px;
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
   background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
+  -webkit-transition: .3s;
+  transition: .3s;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
 input:checked + .slider {
-  background-color: #2196F3;
+  background-color: #0078ff;
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
+  box-shadow: 0 0 0 3px rgba(0, 120, 255, 0.2);
 }
 
 input:checked + .slider:before {
-  -webkit-transform: translateX(16px);
-  -ms-transform: translateX(16px);
-  transform: translateX(16px);
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
 }
 
-/* Rounded sliders */
-.slider.round {
-  border-radius: 20px;
+.explore-container {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1002;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    backdrop-filter: blur(10px);
+    transition: all 0.5s ease;
 }
 
-.slider.round:before {
-  border-radius: 50%;
+.explore-text {
+    color: #333;
+    font-size: 14px;
+    margin-bottom: 15px;
+    line-height: 1.4;
+    font-weight: 500;
 }
 
 .explore-btn {
-    position: absolute;
-    top: 100px;
-    right: 20px;
-    background-color: #0078ff;
+    background: linear-gradient(135deg, #0078ff, #0056b3);
     color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 12px 24px;
     cursor: pointer;
-    border-radius: 5px;
-    z-index: 10;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 14px;
+    box-shadow: 0 4px 12px rgba(0, 120, 255, 0.3);
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.explore-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 120, 255, 0.4);
+}
+
+.explore-btn:active {
+    transform: translateY(0);
+}
+
+.explore-container.hidden {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-50%) translateY(20px);
+}
+
+/* Drag instruction text */
+.drag-instruction {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+.drag-instruction.hidden {
+    opacity: 0;
+    visibility: hidden;
+    transform: translate(-50%, -50%) translateY(-10px);
+}
+
+/* Info panel content styling */
+.info-panel h4 {
+    margin: 0 0 15px 0;
+    color: #333;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-bottom: 2px solid #0078ff;
+    padding-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.info-close-btn {
+    background: none;
+    border: none;
+    color: #666;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 6px 8px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    display: none; /* Hidden by default, shown on responsive */
+    min-width: 32px;
+    min-height: 32px;
+    align-items: center;
+    justify-content: center;
+}
+
+.info-close-btn:hover {
+    background: rgba(255, 0, 0, 0.1);
+    color: #ff0000;
+}
+
+.info-panel ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.info-panel li {
+    margin-bottom: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 14px;
+    line-height: 1.4;
+    color: #555;
+}
+
+.info-panel li:last-child {
+    border-bottom: none;
+}
+
+/* Desktop fixed width */
+@media (min-width: 769px) {
+    .control-panel {
+        width: 300px;
+    }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .control-panel {
+        left: 10px;
+        right: 10px;
+        top: auto;
+        bottom: 20px;
+        transform: none;
+        width: auto;
+        max-height: 50vh;
+    }
+    
+    .collapse-btn {
+        display: block;
+    }
+    
+    .info-close-btn {
+        display: flex !important;
+        font-size: 20px;
+        padding: 8px 10px;
+        min-width: 36px;
+        min-height: 36px;
+    }
+    
+    .control-panel h3 {
+        margin-bottom: 10px;
+    }
+    
+    .info-panel {
+        right: 10px;
+        left: 10px;
+        width: auto;
+        top: 20%;
+    }
+    
+    .info-button {
+        right: 10px;
+        width: 45px;
+        height: 45px;
+        font-size: 16px;
+    }
+    
+    .explore-container {
+        bottom: 20px;
+        left: 10px;
+        right: 10px;
+        transform: none;
+        padding: 15px;
+    }
+    
+    .explore-text {
+        font-size: 13px;
+        margin-bottom: 12px;
+    }
+    
+    .explore-btn {
+        padding: 10px 16px;
+        font-size: 13px;
+    }
+    
+    #header {
+        left: 10px;
+        top: 10px;
+        padding: 8px 16px;
+        transform: none;
+    }
+    
+    #header.landing-mode {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 20px 30px;
+        z-index: 1001;
+    }
+    
+    .landing-overlay {
+        backdrop-filter: blur(10px);
+    }
+    
+    .drag-instruction {
+        font-size: 13px;
+        padding: 10px 20px;
+    }
+    
+    h1 {
+        font-size: 1.4rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .control-panel {
+        bottom: 10px;
+        left: 5px;
+        right: 5px;
+        padding: 15px;
+    }
+    
+    .control-panel.collapsed {
+        max-height: 50px;
+    }
+    
+    .control-panel h3 {
+        font-size: 1rem;
+        margin-bottom: 8px;
+    }
+    
+    .info-close-btn {
+        font-size: 22px;
+        padding: 10px 12px;
+        min-width: 40px;
+        min-height: 40px;
+    }
+    
+    .info-panel {
+        top: 15%;
+        right: 5px;
+        left: 5px;
+        padding: 15px;
+    }
+    
+    .tooltip {
+        width: 200px;
+        font-size: 13px;
+        padding: 10px;
+    }
 }
 
 </style>
 </head>
 <body>
-<div id="header"><h1>Earth quake reporter</h1></div>
-<button class="explore-btn" id="exploreBtn"><i class="fas fa-info-circle"></i> Explore</button>
-
-<div id="interactionInfo" class="hidden">
-    <p>Use the map to explore earthquake data. Zoom, drag, or click on markers for more information.</p>
+<div id="landingOverlay" class="landing-overlay">
+    <div id="header" class="landing-mode"><h1>Earthquake reporter</h1></div>
 </div>
 
-<button id="infoBtn" class="info-button"><i class="fas fa-info-circle"></i></button>
+<div id="exploreContainer" class="explore-container">
+    <div class="explore-text">Use the map to explore earthquake data. Zoom, drag, or click on markers for more information.</div>
+    <button class="explore-btn" id="exploreBtn"><i class="fas fa-info-circle"></i> Explore</button>
+</div>
+
+<div id="dragInstruction" class="drag-instruction hidden">Drag to explore the map</div>
+
+<button id="infoBtn" class="info-button hidden"><i class="fas fa-info-circle"></i></button>
 <div id="infoPanel" class="info-panel hidden">
-    <h4>Earthquake Effects Information</h4>
+    <h4>
+        <span>Earthquake Effects Information</span>
+        <button class="info-close-btn" id="infoCloseBtn">
+            <i class="fas fa-times"></i>
+        </button>
+    </h4>
         <ul>
             <li>2.5 or less: Usually not felt, but can be recorded by seismograph.</li>
             <li>2.5 to 5.4: Often felt, but only causes minor damage.</li>
@@ -232,33 +689,41 @@ input:checked + .slider:before {
 <div class="tooltip"></div>
 
 <div id="controlPanel" class="control-panel hidden">
-    <h3>Filter Options</h3>
-    <div id="geocoder" class="geocoder"></div>
+    <h3>
+        <span>Earthquake Reporter <br> Filter Options</span>
+        <button class="collapse-btn" id="collapseBtn">
+            <i class="fas fa-chevron-up"></i>
+        </button>
+    </h3>
+    
+    <div class="control-panel-content">
+        <div id="geocoder" class="geocoder"></div>
 
-    <div class="switch-container">
-        <label for="heatmapToggle">Heatmap :</label>
-        <label class="switch">
-            <input type="checkbox" id="heatmapToggle" checked>
-            <span class="slider round"></span>
-        </label>
+        <div class="switch-container">
+            <label for="heatmapToggle">Heatmap :</label>
+            <label class="switch">
+                <input type="checkbox" id="heatmapToggle" checked>
+                <span class="slider round"></span>
+            </label>
+        </div>
+
+        <label for="dataRange">Data Range:</label>
+        <select id="dataRange">
+            <option value="day">Day (Realtime)</option>
+            <option value="week">Week</option>
+            <option value="month">Month</option>
+            <option value="year">Year</option>
+        </select>
+
+        <label for="magnitude">Magnitude: <span id="magnitude-value">0</span></label>
+        <input type="range" id="magnitude" name="magnitude" min="0" max="10" step="0.1" value="0">
+        
+        <label for="depth">Depth: <span id="depth-value">0</span></label>
+        <input type="range" id="depth" name="depth" min="0" max="700" step="5" value="0">
+        
+        <label for="timeSlider">Time: <span id="time-value">0:00</span></label>
+        <input type="range" id="timeSlider" name="timeSlider" min="0" max="23" step="1" value="0">
     </div>
-
-    <label for="dataRange">Data Range:</label>
-    <select id="dataRange">
-        <option value="day">Day (Realtime)</option>
-        <option value="week">Week</option>
-        <option value="month">Month</option>
-        <option value="year">Year</option>
-    </select>
-
-    <label for="magnitude">Magnitude: <span id="magnitude-value">0</span></label>
-    <input type="range" id="magnitude" name="magnitude" min="0" max="10" step="0.1" value="0">
-    
-    <label for="depth">Depth: <span id="depth-value">0</span></label>
-    <input type="range" id="depth" name="depth" min="0" max="700" step="5" value="0">
-    
-    <label for="timeSlider">Time: <span id="time-value">0:00</span></label>
-    <input type="range" id="timeSlider" name="timeSlider" min="0" max="23" step="1" value="0">
 </div>
 
 
@@ -317,6 +782,34 @@ geocoder.on('clear', function() {
     map.flyTo(originalPosition);
 });
 
+// Load, enrich and set GeoJSON data into the earthquakes source
+function loadAndSetEarthquakeData(url) {
+    fetch(url)
+        .then(function(res) { return res.json(); })
+        .then(function(geojson) {
+            if (!geojson || !geojson.features) return;
+            var enriched = {
+                type: 'FeatureCollection',
+                features: geojson.features.map(function(f) {
+                    var coords = (f && f.geometry && Array.isArray(f.geometry.coordinates)) ? f.geometry.coordinates : [];
+                    var depthKm = (coords.length > 2 && typeof coords[2] === 'number') ? coords[2] : 0;
+                    var ts = (f && f.properties && typeof f.properties.time === 'number') ? f.properties.time : 0;
+                    var hour = ts ? new Date(ts).getHours() : 0;
+                    return {
+                        type: 'Feature',
+                        geometry: f.geometry,
+                        properties: Object.assign({}, f.properties, { depth: depthKm, hour: hour })
+                    };
+                })
+            };
+            var src = map.getSource('earthquakes');
+            if (src) src.setData(enriched);
+        })
+        .catch(function(err) {
+            console.error('Failed to load earthquake data:', err);
+        });
+}
+
    
 map.on('load', function () {
 
@@ -328,11 +821,14 @@ map.on('load', function () {
         "horizon-blend": 0.02,
     });
 
-    // Add earthquake data as a source
+    // Add earthquake data as a source (empty initially; we will set enriched data)
     map.addSource('earthquakes', {
         type: 'geojson',
-        data: 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson'
+        data: { type: 'FeatureCollection', features: [] }
     });
+
+    // Load initial data and enrich with depth/hour
+    loadAndSetEarthquakeData(dataUrls.day);
 
     // Add the shadow layer first, to appear below the primary earthquake circles
     map.addLayer({
@@ -455,7 +951,7 @@ map.on('load', function () {
     });
 });
 
-document.getElementById('controlPanel').style.display = 'block';
+// Keep control panel hidden by default - only show after explore button is clicked
 
 //Tooltips
 const tooltip = document.querySelector('.tooltip');
@@ -463,7 +959,9 @@ const tooltip = document.querySelector('.tooltip');
 map.on('mouseenter', 'earthquakes', (e) => {
     const properties = e.features[0].properties;
     const geometry = e.features[0].geometry;
-    const depth = geometry.coordinates[1]; 
+    const depth = (geometry && Array.isArray(geometry.coordinates) && geometry.coordinates.length > 2)
+        ? geometry.coordinates[2]
+        : (typeof properties.depth === 'number' ? properties.depth : 0);
     const time = new Date(properties.time).toLocaleString();
     const depthFormatted = depth.toFixed(2);
 
@@ -480,33 +978,200 @@ map.on('mouseleave', 'earthquakes', () => {
     tooltip.style.display = 'none';
 });
 
+// Track if explore button has been clicked
+let exploreButtonClicked = false;
+// Track if drag instruction has been shown
+let dragInstructionShown = false;
+
 map.on('movestart', function() {
-    document.getElementById('header').classList.add('hidden');
-    document.getElementById('interactionInfo').classList.remove('hidden');
-    document.getElementById('interactionInfo').classList.add('shown');
+    // Only hide header if we're in landing mode
+    if (!document.getElementById('landingOverlay').classList.contains('hidden')) {
+        document.getElementById('header').classList.add('hidden');
+    } else {
+        // Keep header visible in explore mode
+        document.getElementById('header').classList.remove('hidden');
+        document.getElementById('header').classList.remove('landing-mode');
+        document.getElementById('header').classList.add('explore-mode');
+    }
+    // Hide drag instruction when user starts dragging
+    document.getElementById('dragInstruction').classList.add('hidden');
+    // Only show explore container if we're in landing mode (overlay is visible)
+    if (!document.getElementById('landingOverlay').classList.contains('hidden')) {
+        document.getElementById('exploreContainer').classList.remove('hidden');
+    }
 });
 
 map.on('zoom', function() {
     var currentZoom = map.getZoom();
     if (currentZoom <= 1) { // Adjust this value based on your preference
+        // Reset to initial landing page state
+        exploreButtonClicked = false;
+        dragInstructionShown = false;
+        
+        // Show the landing overlay again
+        document.getElementById('landingOverlay').classList.remove('hidden');
         document.getElementById('header').classList.remove('hidden');
-        document.getElementById('interactionInfo').classList.add('hidden');
-        document.getElementById('interactionInfo').classList.remove('shown');
+        
+        // Move header back to center when zoomed out
+        document.getElementById('header').classList.remove('explore-mode');
+        document.getElementById('header').classList.add('landing-mode');
+        
+        // Always show explore container when zoomed out to original level
+        document.getElementById('exploreContainer').classList.remove('hidden');
+        
+        // Hide control panel to return to initial state
+        document.getElementById('controlPanel').classList.add('hidden');
+        document.getElementById('controlPanel').classList.remove('shown');
+        
+        // Hide info button to return to initial state
+        document.getElementById('infoBtn').classList.add('hidden');
+        
+        // Hide drag instruction
+        document.getElementById('dragInstruction').classList.add('hidden');
+    } else {
+        // Keep header visible when zoomed in (in explore mode)
+        if (document.getElementById('landingOverlay').classList.contains('hidden')) {
+            // Make sure header is visible and in explore mode
+            document.getElementById('header').classList.remove('hidden');
+            document.getElementById('header').classList.remove('landing-mode');
+            document.getElementById('header').classList.add('explore-mode');
+        } else {
+            document.getElementById('header').classList.add('hidden');
+        }
+        
+        // Show drag instruction when zoomed in (only if not shown before and not in landing mode)
+        if (!dragInstructionShown && document.getElementById('landingOverlay').classList.contains('hidden')) {
+            dragInstructionShown = true;
+            document.getElementById('dragInstruction').classList.remove('hidden');
+            
+            // Auto-hide after 3 seconds
+            setTimeout(function() {
+                document.getElementById('dragInstruction').classList.add('hidden');
+            }, 3000);
+        }
     }
 });
+
 map.on('click', function() {
-    document.getElementById('controlPanel').style.display = 'block';
+    document.getElementById('controlPanel').classList.remove('hidden');
+    document.getElementById('controlPanel').classList.add('shown');
+});
+
+// Handle explore button click
+document.getElementById('exploreBtn').addEventListener('click', function() {
+    // Check if we're currently in landing mode (overlay is visible)
+    const isLandingMode = !document.getElementById('landingOverlay').classList.contains('hidden');
+    
+    if (isLandingMode) {
+        // Set the flag when explore is clicked
+        exploreButtonClicked = true;
+        
+        // Hide the landing overlay with blur effect
+        document.getElementById('landingOverlay').classList.add('hidden');
+        document.getElementById('exploreContainer').classList.add('hidden');
+        
+        // Show control panel
+        document.getElementById('controlPanel').classList.remove('hidden');
+        document.getElementById('controlPanel').classList.add('shown');
+        
+        // Collapse control panel on mobile devices after explore
+        if (window.innerWidth <= 768) {
+            document.getElementById('controlPanel').classList.add('collapsed');
+            // Update collapse button icon
+            var collapseBtn = document.getElementById('collapseBtn');
+            var icon = collapseBtn.querySelector('i');
+            icon.className = 'fas fa-chevron-down';
+        }
+        
+        // Show info button
+        document.getElementById('infoBtn').classList.remove('hidden');
+        
+        // Move header to top-left corner
+        document.getElementById('header').classList.remove('landing-mode');
+        document.getElementById('header').classList.add('explore-mode');
+        
+        // Zoom in to the map when explore button is clicked
+        map.flyTo({
+            center: [0, 0], // Center of the world
+            zoom: 3, // Zoom level 3 for better view of earthquake data
+            duration: 2000, // 2 second animation
+            essential: true // This animation is considered essential with respect to prefers-reduced-motion
+        });
+        
+        // Show drag instruction after zoom animation completes
+        setTimeout(function() {
+            if (!dragInstructionShown) {
+                dragInstructionShown = true;
+                document.getElementById('dragInstruction').classList.remove('hidden');
+                
+                // Auto-hide after 3 seconds
+                setTimeout(function() {
+                    document.getElementById('dragInstruction').classList.add('hidden');
+                }, 3000);
+            }
+        }, 2500); // Show after zoom animation (2s) + small delay
+    }
 });
 document.getElementById('infoBtn').addEventListener('click', function() {
         var infoPanel = document.getElementById('infoPanel');
         infoPanel.classList.toggle('show-info-panel');
     });
+
+// Close button functionality for info panel
+document.getElementById('infoCloseBtn').addEventListener('click', function() {
+    var infoPanel = document.getElementById('infoPanel');
+    infoPanel.classList.remove('show-info-panel');
+});
+
+// Collapse button functionality
+document.getElementById('collapseBtn').addEventListener('click', function() {
+    var controlPanel = document.getElementById('controlPanel');
+    var collapseBtn = document.getElementById('collapseBtn');
+    var icon = collapseBtn.querySelector('i');
+    
+    if (controlPanel.classList.contains('collapsed')) {
+        // Expand
+        controlPanel.classList.remove('collapsed');
+        controlPanel.classList.add('user-expanded'); // Track user expansion
+        icon.className = 'fas fa-chevron-up';
+    } else {
+        // Collapse
+        controlPanel.classList.add('collapsed');
+        controlPanel.classList.remove('user-expanded'); // Remove user expansion tracking
+        icon.className = 'fas fa-chevron-down';
+    }
+});
+
+// Handle window resize to maintain collapse state on mobile
+window.addEventListener('resize', function() {
+    var controlPanel = document.getElementById('controlPanel');
+    var collapseBtn = document.getElementById('collapseBtn');
+    
+    // Only apply mobile behavior if we're in explore mode (overlay is hidden)
+    if (document.getElementById('landingOverlay').classList.contains('hidden')) {
+        if (window.innerWidth <= 768) {
+            // Show collapse button on mobile
+            collapseBtn.style.display = 'block';
+            // If panel is not explicitly expanded, keep it collapsed
+            if (!controlPanel.classList.contains('user-expanded')) {
+                controlPanel.classList.add('collapsed');
+                var icon = collapseBtn.querySelector('i');
+                icon.className = 'fas fa-chevron-down';
+            }
+        } else {
+            // Hide collapse button on desktop and expand panel
+            collapseBtn.style.display = 'none';
+            controlPanel.classList.remove('collapsed');
+            controlPanel.classList.remove('user-expanded');
+        }
+    }
+});
 document.getElementById('dataRange').addEventListener('change', function() {
 const selectedRange = this.value;
 const newDataUrl = dataUrls[selectedRange];
 
-// Update the data source URL
-map.getSource('earthquakes').setData(newDataUrl);
+// Fetch and set enriched data for the selected range
+loadAndSetEarthquakeData(newDataUrl);
 });
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -525,8 +1190,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-document.getElementById('magnitude').addEventListener('change', function() {
+// Combined event listeners for sliders with both display updates and filtering
+document.getElementById('magnitude').addEventListener('input', function() {
     const magnitude = parseFloat(this.value);
+    
+    // Update display
+    document.getElementById('magnitude-value').textContent = this.value;
 
     // Create a filter expression to apply to both layers.
     // This filter will display only the earthquakes with magnitudes greater than or equal to the chosen value.
@@ -537,9 +1206,12 @@ document.getElementById('magnitude').addEventListener('change', function() {
     map.setFilter('earthquakes-shadow', filterExpression);
 });
 
-
-document.getElementById('depth').addEventListener('change', function() {
+document.getElementById('depth').addEventListener('input', function() {
     const depth = parseFloat(this.value);
+    
+    // Update display
+    document.getElementById('depth-value').textContent = `${this.value} km`;
+    
     const depthFilterExpression = ['>=', ['get', 'depth'], depth];
 
     // Apply the filter to your layers.
@@ -547,46 +1219,24 @@ document.getElementById('depth').addEventListener('change', function() {
     map.setFilter('earthquakes-shadow', depthFilterExpression);
 });
 
-document.getElementById('time').addEventListener('change', function() {
-    const timeInput = this.value; // e.g., "14:00"
-    const date = new Date(); // Today's date
-    const [hours, minutes] = timeInput.split(':').map(Number);
-    date.setHours(hours, minutes, 0, 0);
-
-    const timeFilterExpression = ['>=', ['get', 'time'], date.getTime()];
-
-    // Apply the filter to your layers.
+// Time slider filters by hour-of-day (0-23), using enriched 'hour' property
+document.getElementById('timeSlider').addEventListener('input', function() {
+    var hourValue = parseInt(this.value, 10) || 0;
+    
+    // Update display
+    const hours = Math.floor(this.value);
+    document.getElementById('time-value').textContent = `${hours.toString().padStart(2, '0')}:00`;
+    
+    var timeFilterExpression = ['>=', ['get', 'hour'], hourValue];
     map.setFilter('earthquakes', timeFilterExpression);
     map.setFilter('earthquakes-shadow', timeFilterExpression);
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Get references to each slider and its corresponding display element
-    const magnitudeSlider = document.getElementById('magnitude');
-    const magnitudeValueDisplay = document.getElementById('magnitude-value');
-    // const depthSlider = document.getElementById('depth');
-    // const depthValueDisplay = document.getElementById('depth-value');
-    const timeSlider = document.getElementById('timeSlider');
-    const timeValueDisplay = document.getElementById('time-value');
-
-    // Update the display element as the slider's value changes
-    magnitudeSlider.addEventListener('input', function() {
-        magnitudeValueDisplay.textContent = this.value;
-    });
-
-    depthSlider.addEventListener('input', function() {
-       depthValueDisplay.textContent = `${this.value} km`;
-     });
-
-    timeSlider.addEventListener('input', function() {
-        const hours = Math.floor(this.value);
-        timeValueDisplay.textContent = `${hours.toString().padStart(2, '0')}:00`;
-    });
-
-    // Initial display update
-    magnitudeSlider.oninput();
-    depthSlider.oninput();
-    timeSlider.oninput();
+    // Initial display update for sliders
+    document.getElementById('magnitude-value').textContent = document.getElementById('magnitude').value;
+    document.getElementById('depth-value').textContent = `${document.getElementById('depth').value} km`;
+    document.getElementById('time-value').textContent = `${Math.floor(document.getElementById('timeSlider').value).toString().padStart(2, '0')}:00`;
 });
 }
 
